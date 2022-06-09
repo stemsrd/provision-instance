@@ -17,11 +17,11 @@ resource "aws_instance" "unbound" {
         host        = coalesce(self.public_ip, self.private_ip)
         type        = "ssh"
         user        = "ec2-user"
-        private_key = file(pathexpand("~/.aws/new-key.pem"))
+        private_key = file(pathexpand("/var/lib/jenkins/secrets"))
       }
 
       provisioner "local-exec" {
-        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user --private-key ~/.aws/new-key.pem -i '${aws_instance.unbound-server.public_ip},' unbound_setup.yml"
+        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user --private-key /var/lib/jenkins/secrets -i '${aws_instance.unbound-server.public_ip},' unbound_setup.yml"
       }
 }
 
