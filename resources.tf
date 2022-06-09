@@ -6,7 +6,7 @@ resource "aws_instance" "unbound" {
       instance_type = var.instance_type
       security_groups= [ "unbound_security_group"]
       tags= {
-        Name = "unbound_instance-${count.index}"
+        Name = "unbound_instance-${count.index+1}"
       }
     }
 
