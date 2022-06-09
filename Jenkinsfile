@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        PATH = "/usr/local/bin/:$PATH"
+    }
 
     stages {
         stage('Checkout') {
@@ -10,20 +13,20 @@ pipeline {
     
         stage ("terraform init") {
             steps {
-                sh ("/usr/local/bin/terraform init -reconfigure") 
+                sh ("terraform init -reconfigure") 
             }
         }
         
         stage ("plan") {
             steps {
-                sh ('/usr/local/bin/terraform plan') 
+                sh ('terraform plan') 
             }
         }
 
         stage (" Action") {
             steps {
                 echo "Terraform action is --> ${action}"
-                sh ('/usr/local/bin/terraform ${action} --auto-approve') 
+                sh ('terraform ${action} --auto-approve') 
            }
         }
     }
