@@ -21,7 +21,7 @@ resource "aws_instance" "unbound" {
       }
 
       provisioner "local-exec" {
-        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user --private-key /var/lib/jenkins/secrets/new-key.pem -i '${aws_instance.unbound-server.public_ip},' unbound_setup.yml"
+        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user --private-key /var/lib/jenkins/secrets/new-key.pem -i '${aws_instance.unbound_instance-${count.index+1}.public_ip},' unbound_setup.yml"
       }
 }
 
