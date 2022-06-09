@@ -8,13 +8,29 @@ resource "aws_instance" "unbound" {
       tags= {
         Name = "unbound_instance-${count.index+1}"
       }
-    }
 
- resource "aws_security_group" "unbound_security_group" {
+# call ansible to setup instance
+      provisioner "remote-exec" {
+        inline = ["echo hello"]
+      }
+      connection {
+        host        = coalesce(self.public_ip, self.private_ip)
+        type        = "ssh"
+        user        = "ec2-user"
+        private_key = file(pathexpand("~/.aws/new-key.pem"))
+      }
+
+      provisioner "local-exec" {
+        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ec2-user --private-key ~/.aws/new-key.pem -i '${aws_instance.unbound-server.public_ip},' unbound_setup.yml"
+      }
+}
+
+
+resource "aws_security_group" "unbound_security_group" {
       name        = "unbound_security_group"
       description = "security group for unbound"
 
-     ingress {
+      ingress {
         from_port   = 22
         to_port     = 22
         protocol    = "tcp"
@@ -26,11 +42,10 @@ resource "aws_instance" "unbound" {
       }
     }
 
-## Create Elastic IP address for unbound instance
-#resource "aws_eip" "unbound" {
-#  vpc      = true
-#  instance = aws_instance.unbound.id
-#tags= {
-#    Name = "unbound_elastic_ip"
-#  }
-#}
+# store the cloudwatch configuration in the AWS Systems Manager Parameter Store
+resource "aws_ssm_parameter" "cw_agent" {
+     description = "Cloudwatch agent config to configure custom log"
+  name        = "cloudwatch-config"
+  type        = "String"
+  value       = file("cloudwatch_config.json")
+}
