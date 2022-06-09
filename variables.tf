@@ -3,6 +3,11 @@ variable "aws_region" {
        default     = "eu-north-1" 
 }
 
+variable "instance_count" {
+       description = "Number of instances to create."
+       default     = 4
+}
+
 variable "key_name" { 
     description = " SSH keys to connect to ec2 instance" 
     default     =  "new-key" 

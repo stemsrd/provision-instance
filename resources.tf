@@ -1,11 +1,12 @@
 resource "aws_instance" "unbound" {
+      count = var.instance_count
       ami           = var.ami_id
 
       key_name = var.key_name
       instance_type = var.instance_type
       security_groups= [ "unbound_security_group"]
       tags= {
-        Name = "unbound_instance"
+        Name = "unbound_instance-${count.index}"
       }
     }
 
