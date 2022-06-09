@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "mydev-tf-state-bucket"
+    bucket = "my-test-tf-state-bucket"
     key = "main"
-    region = "us-east-2"
+    region = "eu-north-1"
     dynamodb_table = "my-dynamodb-table"
   }
 }
