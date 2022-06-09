@@ -26,11 +26,11 @@ resource "aws_instance" "unbound" {
       }
     }
 
-# Create Elastic IP address for unbound instance
-resource "aws_eip" "unbound" {
-  vpc      = true
-  instance = aws_instance.unbound.id
-tags= {
-    Name = "unbound_elastic_ip"
-  }
-}
+## Create Elastic IP address for unbound instance
+#resource "aws_eip" "unbound" {
+#  vpc      = true
+#  instance = aws_instance.unbound.id
+#tags= {
+#    Name = "unbound_elastic_ip"
+#  }
+#}
